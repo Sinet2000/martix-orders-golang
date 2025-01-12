@@ -6,15 +6,15 @@ import (
 )
 
 type orderRepository struct {
-	database *sql.DB
+	db *sql.DB
 }
 
 func NewOrderRepository(db *sql.DB) OrderRepository {
-	return &orderRepository{database: db}
+	return &orderRepository{db: db}
 }
 
 func (o *orderRepository) ListOrders(c context.Context) ([]Order, error) {
-	rows, err := o.database.Query("SELECT id, customer_id, status, total, created_at FROM orders")
+	rows, err := o.db.Query("SELECT id, customer_id, status, total, created_at FROM orders")
 	if err != nil {
 		return nil, err
 	}
