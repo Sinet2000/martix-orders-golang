@@ -1,7 +1,7 @@
 package entities
 
 type PagedResponse[T any] struct {
-	Data        []T    `json:"data"`        // List of items (generic type)
+	Data        []T    `json:"db"`          // List of items (generic type)
 	PageSize    int    `json:"pageSize"`    // Number of items per page
 	PageIndex   int    `json:"pageIndex"`   // Current page index
 	HasPrevPage bool   `json:"hasPrevPage"` // Indicates if a previous page exists

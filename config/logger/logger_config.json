@@ -1,0 +1,32 @@
+{
+  "development": {
+    "level": "debug",
+    "encoding": "console",
+    "outputPaths": ["stdout"],
+    "errorOutputPaths": ["stderr"],
+    "encoderConfig": {
+      "messageKey": "message",
+      "levelKey": "level",
+      "levelEncoder": "capitalColor",
+      "timeKey": "time",
+      "timeEncoder": "iso8601",
+      "callerKey": "caller",
+      "callerEncoder": "short"
+    }
+  },
+  "production": {
+    "level": "info",
+    "encoding": "json",
+    "outputPaths": ["stdout", "logs/app.log"],
+    "errorOutputPaths": ["stderr", "logs/error.log"],
+    "encoderConfig": {
+      "messageKey": "message",
+      "levelKey": "level",
+      "levelEncoder": "capital",
+      "timeKey": "time",
+      "timeEncoder": "iso8601",
+      "callerKey": "caller",
+      "callerEncoder": "short"
+    }
+  }
+}

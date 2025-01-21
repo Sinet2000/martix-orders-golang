@@ -1,36 +1,70 @@
 package main
 
 import (
-	"log"
-	"time"
-
-	"github.com/Sinet2000/Martix-Orders-Go/bootstrap"
-	"github.com/Sinet2000/Martix-Orders-Go/internal/app/routes"
+	"context"
+	"fmt"
+	"github.com/Sinet2000/Martix-Orders-Go/config"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
+	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 )
 
 func main() {
+	logger, _ := zap.NewProduction()
+	defer func(logger *zap.Logger) {
+		err := logger.Sync()
+		if err != nil {
+			fmt.Errorf("failed to initialize logger %w", err)
+			return
+		}
+	}(logger)
 
-	app := bootstrap.App()
+	// Load configuration
+	cfg := config.LoadConfig()
 
-	appConfig := app.AppConfiguration
+	mongoDbContext, err := config.NewMongoService(cfg, logger)
+	if err != nil {
+		logger.Fatal("Failed to initialize MongoDB", zap.Error(err))
+	}
+	defer mongoDbContext.Close(context.Background(), logger)
 
-	db := app.DbClient.Client()
-	defer app.CloseDBConnection()
-
-	timeout := time.Duration(appConfig.ContextTimeout) * time.Second
-
-	// Initialize Gin engine
+	// Initialize Gin
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 
-	// Setup routes
-	routes.Setup(appConfig, db, timeout, router)
+	// TODO: Add routes here
 
-	// grpc.StartGRPCServer(orderUseCase, appConfig.GRPCAddress)
-
-	// Start the server
-	log.Printf("Starting server on %s...\n", appConfig.ServerAddress)
-	if err := router.Run(appConfig.ServerAddress); err != nil {
-		log.Fatalf("Failed to start server: %v", err)
+	// Create server
+	srv := &http.Server{
+		Addr:    cfg.ServerAddress,
+		Handler: router,
 	}
+
+	// Graceful shutdown
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("Failed to start server: %v", err)
+		}
+	}()
+
+	// Wait for interrupt signal
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+
+	logger.Info("Shutting down server...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := srv.Shutdown(ctx); err != nil {
+		logger.Fatal("Server forced to shutdown:", zap.Error(err))
+	}
+
+	logger.Info("Server exited")
 }

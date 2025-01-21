@@ -3,6 +3,12 @@
 
 This module is a part of the **Martix** application responsible for managing customer orders. It integrates with other services (e.g., Product, User, Auth) and ensures scalability, maintainability, and security.
 
+## Commands
+```bash
+go mod tidy # Cleans up the go.mod and go.sum files by adding missing dependencies and removing unused ones
+go get go.mongodb.org/mongo-driver/mongo
+```
+
 ## Features
 1. **Order CRUD**: Create, retrieve, and manage orders.
 2. **Pagination**: Efficient handling of large datasets.
@@ -10,7 +16,74 @@ This module is a part of the **Martix** application responsible for managing cus
 4. **Authentication**: Secure APIs with JWT.
 5. **Database Integration**: PostgreSQL with connection pooling and migrations.
 
-## Project possible tree view
+## Project possible tree view (NEW)
+```
+📁 order-service/
+├── 📁 cmd/
+│   └── 📄 main.go                # Application entry point
+├── 📁 config/
+│   ├── 📄 config.go              # Configuration structs
+│   ├── 📄 mongodb.go             # MongoDB setup
+│   └── 📄 rabbitmq.go            # RabbitMQ setup
+├── 📁 internal/
+│   ├── 📁 bootstrap/
+│   │   └── 📄 app.go             # Application bootstrapper
+│   ├── 📁 usecase/
+│   │   └── 📄 order.go           # Order business logic
+│   ├── 📁 entity/
+│   │   ├── 📄 order.go           # Core order entity
+│   │   ├── 📄 order_item.go      # Order items
+│   │   ├── 📄 invoice.go         # Invoice generation
+│   │   ├── 📄 shipping.go        # Shipping details
+│   │   ├── 📄 payment.go         # Payment information
+│   │   └── 📄 notification.go     # Notification templates
+│   ├── 📁 repository/
+│   │   └── 📁 mongodb/
+│   │       ├── 📄 order_repo.go   
+│   │       ├── 📄 invoice_repo.go 
+│   │       ├── 📄 shipping_repo.go
+│   │       └── 📄 payment_repo.go
+│   ├── 📁 delivery/              # Communication layers
+│   │   ├── 📁 http/              # REST API
+│   │   │   ├── 📁 middleware/
+│   │   │   │   ├── 📄 auth.go    # JWT authentication
+│   │   │   │   └── 📄 logger.go  # Request logging
+│   │   │   ├── 📁 controller/
+│   │   │   │   └── 📄 order.go   # Order HTTP handlers
+│   │   │   └── 📁 route/
+│   │   │       └── 📄 route.go   # HTTP routes
+│   │   ├── 📁 grpc/              # gRPC service
+│   │   └── 📁 message/           # Message queue handlers
+│   │       ├── 📁 consumer/      # Incoming messages
+│   │       │   ├── 📄 payment_events.go    # Payment processing
+│   │       │   ├── 📄 inventory_events.go  # Stock updates
+│   │       │   ├── 📄 shipping_events.go   # Delivery updates
+│   │       │   └── 📄 notification_events.go
+│   │       └── 📁 publisher/     # Outgoing messages
+│   │           ├── 📄 order_created.go
+│   │           ├── 📄 order_updated.go
+│   │           └── 📄 order_cancelled.go
+│   └── 📁 service/               # Domain services
+│       ├── 📄 pricing.go         # Price calculations
+│       ├── 📄 tax.go             # Tax calculations
+│       ├── 📄 discount.go        # Discount rules
+│       └── 📄 fraud.go           # Fraud detection
+├── 📁 pkg/
+│   ├── 📁 utils/
+│   │   ├── 📄 logger.go          # Logging utility
+│   │   └── 📄 validator.go       # Input validation
+│   └── 📁 messaging/
+│       └── 📄 rabbitmq.go        # RabbitMQ helper functions
+├── 📄 Dockerfile                 # Service container definition
+├── 📄 docker-compose.yml         # Multi-container setup
+├── 📄 .env                       # Environment variables
+├── 📄 .env.example              # Environment template
+├── 📄 Makefile                  # Build automation
+└── 📄 README.md                 # Project documentation
+
+```
+
+## Project possible tree view (OLD)
 ```
 order-management/
 ├── cmd/

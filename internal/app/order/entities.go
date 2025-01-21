@@ -22,7 +22,7 @@ type OrderEvent struct {
 	Order     Order  `json:"order"`
 }
 
-// OrderRepository defines the interface for order data operations
+// OrderRepository defines the interface for order db operations
 type OrderRepository interface {
 	Create(c context.Context, order *Order) error
 	FetchByCustomerID(c context.Context, customerId string) ([]Order, error)
