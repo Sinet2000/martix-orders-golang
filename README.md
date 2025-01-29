@@ -92,18 +92,18 @@ communication.
 A list of high-performance tools used in GoLang for efficient logging, routing, server handling, and dependency
 injection.
 
-| Tool                            | Company | Purpose                                     | Repository                                      |
-|---------------------------------|---------|---------------------------------------------|-------------------------------------------------|
-| **Zap**                         | Uber    | High-performance logging                    | [zap](https://github.com/uber-go/zap)           |
-| **Gorilla Mux**                 | Meta    | HTTP request router                         | [mux](https://github.com/gorilla/mux)           |
-| **Fasthttp**                    | Vercel  | Fast HTTP server                            | [fasthttp](https://github.com/valyala/fasthttp) |
-| **FX**                          | Uber    | Dependency injection                        | [fx](https://github.com/uber-go/fx)             |
-| **pgx**                         |         | Fastest PostgreSQL driver in Go.            |                                                 |
-| **Watermill**                   |         | Kafka/NATS support.                         |                                                 |
-| **Kafka/NATS support**          |         | OAuth2/JWT Authentication + Rate Limiting.  |                                                 |
-| **Kong Go Client**              |         | API Gateway & Rate Limiting.                |                                                 |
-| **gobreaker**                   |         | Retries, Circuit Breakers, Fault Tolerance. |                                                 |
-| **Temporal for SAGA workflows** |         | Distributed Transactions (SAGA Pattern)     |                                                 |
+| Tool            | Company | Purpose                                     | Repository                                                                                                                                                                                                     |
+|-----------------|---------|---------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Zap**         | Uber    | High-performance logging                    | [zap](https://github.com/uber-go/zap)                                                                                                                                                                          |
+| **Gorilla Mux** | Meta    | HTTP request router                         | [mux](https://github.com/gorilla/mux)                                                                                                                                                                          |
+| **Fasthttp**    | Vercel  | Fast HTTP server                            | [fasthttp](https://github.com/valyala/fasthttp)                                                                                                                                                                |
+| **FX**          | Uber    | Dependency injection                        | [fx](https://github.com/uber-go/fx)                                                                                                                                                                            |
+| **pgx**         |         | Fastest PostgreSQL driver in Go.            |                                                                                                                                                                                                                |
+| **Watermill**   |         | Kafka/NATS support.                         | [watermill](https://watermill.io/docs/getting-started/)                                                                                                                                                        |
+| **golang-jwt**  |         | OAuth2/JWT Authentication.                  |                                                                                                                                                                                                                |
+|                 |         | API Gateway & Rate Limiting.                | [The Anatomy of an API Gateway in Golang](https://hackernoon.com/the-anatomy-of-an-api-gateway-in-golang)                                                                                                      |
+|                 |         | Retries, Circuit Breakers, Fault Tolerance. | [Writing a circuit breaker in Go](https://rednafi.com/go/circuit_breaker/)                                                                                                                                     |
+|                 |         | Distributed Transactions (SAGA Pattern)     | https://github.com/itimofeev/go-saga, https://www.codingexplorations.com/blog/implementing-the-saga-pattern-in-go-a-practical-guide , https://dev.to/yedf2/how-to-implement-saga-pattern-in-microservices-2gj3 |
 
 ---
 
