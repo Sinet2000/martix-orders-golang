@@ -14,7 +14,7 @@ scalability**.
 ## 🎯 Key Features
 
 ✅ **Microservices Architecture**: Each component (Payments, Orders, Fulfillment) runs independently for scalability.  
-✅ **High-Performance API**: Uses **Fasthttp** and **Gorilla Mux** for optimized request handling.  
+✅ **High-Performance API**: Uses **Gin** and **Gorilla Mux** for optimized request handling.  
 ✅ **Structured Logging**: Zap ensures efficient logging with minimal overhead.  
 ✅ **Event-Driven Order Processing**: Ensures **asynchronous** and **real-time updates** using messaging queues.  
 ✅ **Security First**: OAuth2/JWT authentication with rate-limiting for protection.  
@@ -94,15 +94,14 @@ injection.
 
 | Tool            | Company | Purpose                                     | Repository                                                                                                                                                                                                     |
 |-----------------|---------|---------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **gin**         |     | Fast, easy to use, middleware support                    | [gin](github.com/gin-gonic/gin)                                                                                                                                                                          |
+| **gin**         |     | Fast, easy to use, middleware support                    | [gin](github.com/gin-gonic/gin)                                                                                                                                                                                |
 | **Zap**         | Uber    | High-performance logging                    | [zap](https://github.com/uber-go/zap)                                                                                                                                                                          |
 | **Gorilla Mux** | Meta    | HTTP request router                         | [mux](https://github.com/gorilla/mux)                                                                                                                                                                          |
-| **Fasthttp**    | Vercel  | Fast HTTP server                            | [fasthttp](https://github.com/valyala/fasthttp)                                                                                                                                                                |
 | **FX**          | Uber    | Dependency injection                        | [fx](https://github.com/uber-go/fx)                                                                                                                                                                            |
 | **pgx**         |         | Fastest PostgreSQL driver in Go.            |                                                                                                                                                                                                                |
 | **Watermill**   |         | Kafka/NATS support.                         | [watermill](https://watermill.io/docs/getting-started/)                                                                                                                                                        |
 | **golang-jwt**  |         | OAuth2/JWT Authentication.                  |                                                                                                                                                                                                                |
-|                 |         | API Gateway & Rate Limiting.                | [The Anatomy of an API Gateway in Golang](https://hackernoon.com/the-anatomy-of-an-api-gateway-in-golang)                                                                                                      |
+|                 |         | API Gateway & Rate Limiting.                | [toolboth](https://github.com/didip/tollbooth) [The Anatomy of an API Gateway in Golang](https://hackernoon.com/the-anatomy-of-an-api-gateway-in-golang)                                                                          |
 |                 |         | Retries, Circuit Breakers, Fault Tolerance. | [Writing a circuit breaker in Go](https://rednafi.com/go/circuit_breaker/)                                                                                                                                     |
 |                 |         | Distributed Transactions (SAGA Pattern)     | https://github.com/itimofeev/go-saga, https://www.codingexplorations.com/blog/implementing-the-saga-pattern-in-go-a-practical-guide , https://dev.to/yedf2/how-to-implement-saga-pattern-in-microservices-2gj3 |
 
@@ -191,6 +190,14 @@ injection.
 ### Install all required tools:
 
 ```sh
+go get -u \
+    github.com/jackc/pgx/v5 \
+    github.com/gin-gonic/gin \
+    go.uber.org/zap \
+    github.com/gorilla/mux \
+    go.uber.org/fx \
+    github.com/ThreeDotsLabs/watermill \
+    github.com/golang-jwt/jwt/v4
 ```
 
 ---
