@@ -1,0 +1,33 @@
+logger.Error("Database connection failed",
+    zap.Error(err),
+    zap.String("host", dbHost),
+    zap.Int("retry_attempt", retryCount),
+)
+
+// 2. Debug logging for development
+logger.Debug("Cache hit",
+    zap.String("key", cacheKey),
+    zap.Int("size_bytes", len(data)),
+)
+
+// 3. Warning for business logic issues
+logger.Warn("Invalid promotion code used",
+    zap.String("code", promoCode),
+    zap.String("user_id", userID),
+)
+
+// 4. Structured logging with multiple fields
+logger.Info("Payment processed",
+    zap.String("payment_id", paymentID),
+    zap.String("order_id", orderID),
+    zap.Float64("amount", amount),
+    zap.String("currency", "USD"),
+    zap.String("payment_method", paymentMethod),
+)
+
+// 5. Fatal errors that require immediate attention
+logger.Fatal("Critical system error",
+    zap.Error(err),
+    zap.String("component", "payment_processor"),
+    zap.Any("last_state", lastState),
+)

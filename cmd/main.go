@@ -3,7 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/Sinet2000/Martix-Orders-Go/config"
+	"github.com/Sinet2000/Martix-Orders-Go/internal/infrastructure/config"
+	"github.com/Sinet2000/Martix-Orders-Go/internal/infrastructure/database/mongodb"
+	"github.com/Sinet2000/Martix-Orders-Go/internal/pkg/logger"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"log"
@@ -15,26 +17,33 @@ import (
 )
 
 func main() {
-	logger, _ := zap.NewProduction()
-	defer func(logger *zap.Logger) {
-		err := logger.Sync()
-		if err != nil {
-			fmt.Errorf("failed to initialize logger %w", err)
-			return
-		}
-	}(logger)
-
 	// Load configuration
-	cfg := config.LoadConfig()
+	cfg, err := config.LoadConfig()
+	if err != nil {
+		panic(fmt.Sprintf("failed to load config: %v", err))
+	}
 
-	mongoDbContext, err := config.NewMongoService(cfg, logger)
+	// 2. Initialize logger early
+	if err := logger.InitLogger(cfg.AppEnv); err != nil {
+		panic(fmt.Sprintf("failed to initialize logger: %v", err))
+	}
+	// Ensure we flush any buffered log entries on shutdown
+	defer logger.Sync()
+
+	// 3. Log application startup
+	logger.Info("Starting application",
+		zap.String("environment", cfg.AppEnv),
+		zap.String("port", cfg.Port),
+	)
+
+	mongoDbContext, err := mongodb.NewMongoService(&cfg.MongoDB)
 	if err != nil {
 		logger.Fatal("Failed to initialize MongoDB", zap.Error(err))
 	}
-	defer mongoDbContext.Close(context.Background(), logger)
+	defer mongoDbContext.Close(context.Background())
 
 	// Initialize Gin
-	gin.SetMode(gin.ReleaseMode)
+	gin.SetMode(gin.DebugMode)
 	router := gin.Default()
 
 	// TODO: Add routes here
@@ -53,11 +62,12 @@ func main() {
 	}()
 
 	// Wait for interrupt signal
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	<-quit
+	// 5. Handle graceful shutdown
+	shutdown := make(chan os.Signal, 1)
+	signal.Notify(shutdown, os.Interrupt, syscall.SIGTERM)
 
-	logger.Info("Shutting down server...")
+	<-shutdown
+	logger.Info("Shutting down application...")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
