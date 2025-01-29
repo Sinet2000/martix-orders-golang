@@ -1,22 +1,122 @@
+# 🚀 Order Management Service
 
-# Order Management Service
+## 📌 Project Overview
 
-This module is a part of the **Martix** application responsible for managing customer orders. It integrates with other services (e.g., Product, User, Auth) and ensures scalability, maintainability, and security.
+This module is a part of the **Martix** application responsible for managing customer orders. It integrates with other
+services (e.g., Product, User, Auth) and ensures scalability, maintainability, and security.
 
-## Commands
-```bash
-go mod tidy # Cleans up the go.mod and go.sum files by adding missing dependencies and removing unused ones
-go get go.mongodb.org/mongo-driver/mongo
-```
+This project is a **high-performance, microservices-based order processing system** designed to handle **payments, order
+management, and fulfillment** with low latency and scalability.
+
+Built with **GoLang**, it leverages high-performance tools and best practices for **fault tolerance, security, and
+scalability**.
+
+## 🎯 Key Features
+
+✅ **Microservices Architecture**: Each component (Payments, Orders, Fulfillment) runs independently for scalability.  
+✅ **High-Performance API**: Uses **Fasthttp** and **Gorilla Mux** for optimized request handling.  
+✅ **Structured Logging**: Zap ensures efficient logging with minimal overhead.  
+✅ **Event-Driven Order Processing**: Ensures **asynchronous** and **real-time updates** using messaging queues.  
+✅ **Security First**: OAuth2/JWT authentication with rate-limiting for protection.  
+✅ **Resilient & Fault-Tolerant**: Implements retries, circuit breakers, and distributed transactions.  
+✅ **Database Consistency**: Uses PostgreSQL/CockroachDB for ACID compliance and **strong consistency**.
+
+---
+
+## 🛠 Communication & Architecture
+
+The system uses a **hybrid approach** combining **gRPC, messaging queues, and REST APIs** for efficient inter-service
+communication.
+
+### **1️⃣ API Gateway & External Communication**
+
+- **REST APIs**: Public-facing APIs for customer interactions (e.g., placing orders, checking payment status).
+- **GraphQL** *(Optional)*: Provides a single endpoint for querying multiple services efficiently.
+
+### **2️⃣ Internal Microservice Communication**
+
+- **gRPC**: Used for high-speed, synchronous communication between critical services (e.g., Payment ↔ Order).
+- **Message Queue (Kafka/RabbitMQ)**: Asynchronous processing for **event-driven workflows**:
+    - **Order Events**: Order creation, status updates, inventory updates.
+    - **Payment Events**: Payment success/failure, refunds.
+    - **Notification Events**: Triggering emails, SMS updates.
+
+### **3️⃣ Data Management & Consistency**
+
+- **Event Sourcing**: Ensures order state consistency in a **distributed matrix system**.
+- **CQRS (Command Query Responsibility Segregation)**:
+    - **Write Operations** → Handled by services with event logs.
+    - **Read Operations** → Optimized using materialized views.
+- **Database**: PostgreSQL/CockroachDB (Ensures consistency, high availability).
+
+---
+
+## 🔥 System Workflow
+
+1️⃣ **Customer places an order** → Order Service validates request.  
+2️⃣ **Payment Service processes the transaction** → Communicates via **gRPC**.  
+3️⃣ **Order Service updates order status** → Publishes event to **Kafka/RabbitMQ**.  
+4️⃣ **Fulfillment Service processes shipping** → Listens to **order events** asynchronously.  
+5️⃣ **Notification Service sends order confirmation** via **event-driven messaging**.
+
+---
+
+## 🔒 Security & Protection
+
+- **Authentication & Authorization**: OAuth2/JWT for user authentication.
+- **Rate Limiting & DDoS Protection**: API Gateway limits abusive requests.
+- **Retry Mechanism & Circuit Breakers**: Ensures system stability under failures.
+- **Database Transactions**: ACID compliance to avoid race conditions.
+
+---
+
+## 🚀 Scalability & Performance
+
+- **Horizontal Scaling**: Microservices auto-scale independently.
+- **Load Balancing**: Uses **NGINX** or **Envoy Proxy** for traffic management.
+- **Caching**: **Redis** used for frequently accessed data (e.g., order history).
+
+---
+
+## 🎯 Why This Architecture?
+
+1️⃣ **Low Latency** - gRPC ensures fast, binary communication.  
+2️⃣ **High Availability** - Event-driven messaging reduces bottlenecks.  
+3️⃣ **Scalability** - Stateless services scale horizontally.  
+4️⃣ **Data Integrity** - Event Sourcing + CQRS maintains order consistency.
+
+---
+
+## 📌 Popular tools used
+
+A list of high-performance tools used in GoLang for efficient logging, routing, server handling, and dependency
+injection.
+
+| Tool                            | Company | Purpose                                     | Repository                                      |
+|---------------------------------|---------|---------------------------------------------|-------------------------------------------------|
+| **Zap**                         | Uber    | High-performance logging                    | [zap](https://github.com/uber-go/zap)           |
+| **Gorilla Mux**                 | Meta    | HTTP request router                         | [mux](https://github.com/gorilla/mux)           |
+| **Fasthttp**                    | Vercel  | Fast HTTP server                            | [fasthttp](https://github.com/valyala/fasthttp) |
+| **FX**                          | Uber    | Dependency injection                        | [fx](https://github.com/uber-go/fx)             |
+| **pgx**                         |         | Fastest PostgreSQL driver in Go.            |                                                 |
+| **Watermill**                   |         | Kafka/NATS support.                         |                                                 |
+| **Kafka/NATS support**          |         | OAuth2/JWT Authentication + Rate Limiting.  |                                                 |
+| **Kong Go Client**              |         | API Gateway & Rate Limiting.                |                                                 |
+| **gobreaker**                   |         | Retries, Circuit Breakers, Fault Tolerance. |                                                 |
+| **Temporal for SAGA workflows** |         | Distributed Transactions (SAGA Pattern)     |                                                 |
+
+---
 
 ## Features
+
 1. **Order CRUD**: Create, retrieve, and manage orders.
 2. **Pagination**: Efficient handling of large datasets.
 3. **Messaging**: Event-driven architecture with RabbitMQ.
 4. **Authentication**: Secure APIs with JWT.
 5. **Database Integration**: PostgreSQL with connection pooling and migrations.
 
-## Project possible tree view (NEW)
+## Project possible tree view (In progress.)
+
 ```
 📁 order-service/
 ├── 📁 cmd/
@@ -83,203 +183,20 @@ go get go.mongodb.org/mongo-driver/mongo
 
 ```
 
-## Project possible tree view (OLD)
-```
-order-management/
-├── cmd/
-│   └── main.go                          # Application entry point
-├── config/
-│   ├── config.go                        # Configuration management
-│   ├── app.env                          # Environment variables
-├── internal/
-│   ├── app/                             # Application logic
-│   │   ├── order/
-│   │   │   ├── dto.go                   # Data Transfer Objects
-│   │   │   ├── handler.go               # HTTP or gRPC Handlers
-│   │   │   ├── repository.go            # Repository interface and implementation
-│   │   │   ├── service.go               # Business logic
-│   │   │   ├── validator.go             # Input validation logic
-│   │   │   └── events.go                # Event definitions (e.g., OrderCreated)
-│   │   └── messaging/
-│   │       ├── producer.go              # Publish messages to RabbitMQ/Kafka
-│   │       ├── consumer.go              # Consume messages from RabbitMQ/Kafka
-│   │       ├── handlers.go              # Handlers for incoming events
-│   │       └── message_processor.go     # Event processing and dispatch logic
-│   ├── core/                            # Core utilities and extensions
-│   │   ├── auth.go                      # Authentication middleware
-│   │   ├── error.go                     # Centralized error handling
-│   │   ├── pagination.go                # Pagination utility
-│   │   ├── logger.go                    # Logger setup
-│   │   └── extensions.go                # Generic extensions
-│   ├── data/                            # Database layer
-│   │   ├── db.go                        # PostgreSQL connection setup
-│   │   ├── migrations/                  # SQL migrations
-│   │   │   ├── 001_create_orders.sql    # Initial schema for orders
-│   │   │   └── 002_create_indexes.sql   # Index creation
-│   │   ├── entities.go                  # Database entities
-│   │   ├── repository.go                # Generic DB repository utilities
-│   │   └── cache.go                     # Redis caching setup
-│   ├── proto/                           # gRPC Protobuf definitions
-│   │   ├── order.proto                  # gRPC API for orders
-│   │   └── generated/                   # Compiled Protobuf files
-│   │       ├── order.pb.go
-│   │       └── order_grpc.pb.go
-│   ├── routes/
-│   │   └── routes.go                    # RESTful API route setup
-│   └── events/
-│       ├── dispatcher.go                # Dispatch events to appropriate handlers
-│       ├── event_bus.go                 # Event bus for subscribing and publishing
-│       └── handlers/                    # Event handler implementations
-│           ├── order_created.go         # OrderCreated event handler
-│           └── order_updated.go         # OrderUpdated event handler
-├── pkg/                                 # Shared utility packages
-│   ├── utils/
-│   │   ├── hash.go                      # Password hashing utility
-│   │   └── time.go                      # Time utilities
-│   ├── logger/
-│   │   ├── logger.go                    # Application-wide logger
-│   │   └── log_formatter.go             # Custom log formatting
-├── .gitignore                           # Git ignore rules
-├── Dockerfile                           # Docker configuration for deployment
-├── docker-compose.yml                   # Docker Compose for dependencies
-├── go.mod                               # Go module file
-├── go.sum                               # Dependencies checksum
-└── README.md                            # Documentation
+---
+
+## 🔥 Installation
+
+### Install all required tools:
+
+```sh
 ```
 
-## Installation
-- [Please install protobuff compiler](https://github.com/protocolbuffers/protobuf/releases)
+---
 
-## gRPC
+## Commands
+
 ```bash
-protoc --go_out=. --go-grpc_out=. internal/app/order/order.proto
-```
-
-### 1. Reuse .proto File in Node.js
-The .proto file remains the same, serving as the single source of truth. You will use it to generate client and server code for Node.js with NestJS and React.
-
-### 2. Setting Up for NestJS
-- Install Dependencies
-- Install required gRPC libraries for NestJS:
-```bash
-npm install @grpc/grpc-js @grpc/proto-loader
-```
-
-**NestJS gRPC Server**
-
-Create a grpc-server.module.ts to handle your gRPC server:
-
-```js
-// grpc-server.module.ts
-import { Module } from '@nestjs/common';
-import { GrpcOptions, Transport } from '@nestjs/microservices';
-import { join } from 'path';
-
-@Module({})
-export class GrpcServerModule {
-  static getGrpcConfig(): GrpcOptions {
-    return {
-      transport: Transport.GRPC,
-      options: {
-        package: 'order', // Name of the package defined in .proto
-        protoPath: join(__dirname, '../proto/order.proto'), // Path to the .proto file
-        url: 'localhost:50051',
-      },
-    };
-  }
-}
-
-```
-
-**NestJS Service Implementation**
-Implement the OrderService defined in the .proto file:
-```js
-// order.service.ts
-
-import { Injectable } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { OrderServiceController, CreateOrderRequest, OrderResponse } from './proto/order';
-
-@Injectable()
-export class OrderService implements OrderServiceController {
-  createOrder(data: CreateOrderRequest): Observable<OrderResponse> {
-    const response: OrderResponse = {
-      id: 1,
-      customerId: data.customerId,
-      status: 'Pending',
-      total: data.totalPrice,
-      createdAt: new Date().toISOString(),
-    };
-    return new Observable((subscriber) => {
-      subscriber.next(response);
-      subscriber.complete();
-    });
-  }
-}
-
-
-```
-
-### 3. Setting Up for React
-Install gRPC-Web
-Install the required libraries:
-```bash
-npm install @grpc/grpc-web google-protobuf
-```
-
-**Generate Client Code**
-Use the protoc-gen-grpc-web plugin to generate JavaScript/TypeScript client code:
-```bash
-protoc --proto_path=internal/app/order \
-       --js_out=import_style=commonjs:./src/proto \
-       --grpc-web_out=import_style=typescript,mode=grpcwebtext:./src/proto \
-       internal/app/order/order.proto
-
-```
-**This generates:**
-- `order_pb.js:` Protobuf message types.
-- `order_grpc_web_pb.js`: gRPC-Web client code.
-
-**React Code to Consume gRPC**
-Use the generated client to make gRPC calls in React:
-
-```js
-import React, { useEffect } from "react";
-import { OrderServiceClient } from "./proto/order_grpc_web_pb";
-import { CreateOrderRequest, OrderItem } from "./proto/order_pb";
-
-const client = new OrderServiceClient("http://localhost:8080");
-
-const App = () => {
-  useEffect(() => {
-    const request = new CreateOrderRequest();
-    request.setCustomerId("12345");
-
-    const item1 = new OrderItem();
-    item1.setProductId("p1");
-    item1.setQuantity(2);
-
-    const item2 = new OrderItem();
-    item2.setProductId("p2");
-    item2.setQuantity(1);
-
-    request.addItems(item1);
-    request.addItems(item2);
-    request.setPaymentMethod("Credit Card");
-    request.setTotalPrice(150.75);
-
-    client.createOrder(request, {}, (err, response) => {
-      if (err) {
-        console.error("Error:", err.message);
-      } else {
-        console.log("Order Created:", response.toObject());
-      }
-    });
-  }, []);
-
-  return <div>gRPC React Client</div>;
-};
-
-export default App;
-
+go mod tidy # Cleans up the go.mod and go.sum files by adding missing dependencies and removing unused ones
+go get go.mongodb.org/mongo-driver/mongo
 ```
