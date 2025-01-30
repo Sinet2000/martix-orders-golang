@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"github.com/Sinet2000/Martix-Orders-Go/internal/infrastructure/database/postgresql"
 	"github.com/joho/godotenv"
 	"os"
 	"strconv"
@@ -10,11 +11,12 @@ import (
 
 // AppConfig holds all application configuration
 type AppConfig struct {
-	AppEnv         string        `json:"app_env"`
-	ServerAddress  string        `json:"server_address"`
-	Port           string        `json:"port"`
-	ContextTimeout time.Duration `json:"context_timeout"`
-	MongoDB        MongoConfig   `json:"mongodb"`
+	AppEnv         string                      `json:"app_env"`
+	ServerAddress  string                      `json:"server_address"`
+	Port           string                      `json:"port"`
+	ContextTimeout time.Duration               `json:"context_timeout"`
+	MongoDB        MongoConfig                 `json:"mongodb"`
+	PgDb           postgresql.PostgresqlConfig `json:"pgdb"`
 }
 
 // MongoConfig holds MongoDB specific configuration
@@ -41,8 +43,8 @@ func LoadConfig() (*AppConfig, error) {
 
 	config := &AppConfig{
 		AppEnv:         getEnvOrDefault("APP_ENV", "development"),
-		ServerAddress:  getEnvOrDefault("SERVER_ADDRESS", ":8080"),
-		Port:           getEnvOrDefault("PORT", "8080"),
+		ServerAddress:  getEnvOrDefault("SERVER_ADDRESS", ":44333"),
+		Port:           getEnvOrDefault("PORT", "44333"),
 		ContextTimeout: time.Duration(timeout) * time.Second,
 		MongoDB: MongoConfig{
 			URI:        getEnvOrDefault("MONGO_URI", "mongodb://localhost:27017"),
@@ -50,6 +52,13 @@ func LoadConfig() (*AppConfig, error) {
 			User:       getEnvOrDefault("MONGO_USER", "root"),
 			Password:   getEnvOrDefault("MONGO_PASSWORD", ""),
 			AuthSource: getEnvOrDefault("MONGO_AUTH_SOURCE", "admin"),
+		},
+		PgDb: postgresql.PostgresqlConfig{
+			Username: getEnvOrDefault("POSTGRES_USER", "postgres"),
+			Password: getEnvOrDefault("POSTGRES_PASSWORD", ""),
+			DbName:   getEnvOrDefault("POSTGRES_DB", "commerce_hub"),
+			HostName: getEnvOrDefault("POSTGRES_HOST", "localhost"),
+			Port:     getEnvOrDefault("POSTGRES_PORT", "5432"),
 		},
 	}
 

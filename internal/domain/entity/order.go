@@ -2,8 +2,6 @@ package entity
 
 import (
 	"time"
-
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type OrderStatus string
@@ -17,19 +15,21 @@ const (
 )
 
 type OrderItem struct {
-	ProductID  primitive.ObjectID `bson:"product_id" json:"product_id"`
-	Quantity   int                `bson:"quantity" json:"quantity"`
-	UnitPrice  float64            `bson:"unit_price" json:"unit_price"`
-	TotalPrice float64            `bson:"total_price" json:"total_price"`
+	ID         int64   `json:"id"`
+	OrderID    int64   `json:"order_id"`
+	ProductID  int64   `json:"product_id"`
+	Quantity   int     `json:"quantity"`
+	UnitPrice  float64 `json:"unit_price"`
+	TotalPrice float64 `json:"total_price"`
 }
 
 type Order struct {
-	ID           primitive.ObjectID `bson:"_id" json:"id"`
-	UserID       primitive.ObjectID `bson:"user_id" json:"user_id"`
-	Items        []OrderItem        `bson:"items" json:"items"`
-	TotalAmount  float64            `bson:"total_amount" json:"total_amount"`
-	Status       OrderStatus        `bson:"status" json:"status"`
-	ShippingAddr string             `bson:"shipping_addr" json:"shipping_addr"`
-	CreatedAt    time.Time          `bson:"created_at" json:"created_at"`
-	UpdatedAt    time.Time          `bson:"updated_at" json:"updated_at"`
+	ID           int64       `json:"id"`
+	UserID       int64       `json:"user_id"`
+	Items        []OrderItem `json:"items"`
+	TotalAmount  float64     `json:"total_amount"`
+	Status       OrderStatus `json:"status"`
+	ShippingAddr string      `json:"shipping_addr"`
+	CreatedAt    time.Time   `json:"created_at"`
+	UpdatedAt    time.Time   `json:"updated_at"`
 }

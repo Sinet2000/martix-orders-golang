@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/Sinet2000/Martix-Orders-Go/internal/infrastructure/config"
-	"github.com/Sinet2000/Martix-Orders-Go/internal/infrastructure/database/mongodb"
+	"github.com/Sinet2000/Martix-Orders-Go/internal/infrastructure/database/postgresql"
 	"github.com/Sinet2000/Martix-Orders-Go/internal/pkg/logger"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -36,17 +36,26 @@ func main() {
 		zap.String("port", cfg.Port),
 	)
 
-	mongoDbContext, err := mongodb.NewMongoService(&cfg.MongoDB)
+	pgDbContext, err := postgresql.NewPostgresService(&cfg.PgDb)
 	if err != nil {
-		logger.Fatal("Failed to initialize MongoDB", zap.Error(err))
+		logger.Fatal("Failed to initialize PostgreSQL", zap.Error(err))
 	}
-	defer mongoDbContext.Close(context.Background())
+	defer pgDbContext.Close()
+
+	//mongoDbContext, err := mongodb.NewMongoService(&cfg.MongoDB)
+	//if err != nil {
+	//	logger.Fatal("Failed to initialize MongoDB", zap.Error(err))
+	//}
+	//defer mongoDbContext.Close(context.Background())
 
 	// Initialize Gin
 	gin.SetMode(gin.DebugMode)
 	router := gin.Default()
 
 	// TODO: Add routes here
+	router.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"message": "Hello, Gin!"})
+	})
 
 	// Create server
 	srv := &http.Server{
