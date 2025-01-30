@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/Sinet2000/Martix-Orders-Go/internal/delivery/http/router"
 	"github.com/Sinet2000/Martix-Orders-Go/internal/infrastructure/config"
 	"github.com/Sinet2000/Martix-Orders-Go/internal/infrastructure/database/postgresql"
 	"github.com/Sinet2000/Martix-Orders-Go/internal/pkg/logger"
@@ -50,12 +51,19 @@ func main() {
 
 	// Initialize Gin
 	gin.SetMode(gin.DebugMode)
-	router := gin.Default()
+
+	//orderRepo := repository.NewOrderRepository(db)
+	//
+	//// Initialize use case
+	//createOrderUseCase := usecase.NewCreateOrderUseCase(orderRepo)
+	//
+	//// Initialize handlers
+	//orderHandler := handler.NewOrderHandler(createOrderUseCase, logger)
+	//
+	//// Setup router
+	router := router.SetupRouter()
 
 	// TODO: Add routes here
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"message": "Hello, Gin!"})
-	})
 
 	// Create server
 	srv := &http.Server{
