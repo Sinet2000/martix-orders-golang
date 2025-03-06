@@ -206,3 +206,8 @@ go get -u \
 go mod tidy # Cleans up the go.mod and go.sum files by adding missing dependencies and removing unused ones
 go get go.mongodb.org/mongo-driver/mongo
 ```
+
+---
+
+## Useful links
+- [A Million WebSockets and Go](https://www.freecodecamp.org/news/million-websockets-and-go-cc58418460bb/)
