@@ -211,3 +211,11 @@ go get go.mongodb.org/mongo-driver/mongo
 
 ## Useful links
 - [A Million WebSockets and Go](https://www.freecodecamp.org/news/million-websockets-and-go-cc58418460bb/)
+- [Standard Go Project Layout](https://github.com/golang-standards/project-layout)
+- [Rob Pike](https://en.wikipedia.org/wiki/Rob_Pike)
+- [Go’s Extended Concurrency: Semaphores (Part 1)](https://medium.com/@deckarep/gos-extended-concurrency-semaphores-part-1-5eeabfa351ce)
+- [Why is GO111MODULE everywhere, and everything about Go Modules (updated with Go 1.20)](https://dev.to/maelvls/why-is-go111module-everywhere-and-everything-about-go-modules-24k)
+- [Delve](https://github.com/go-delve/delve)
+- [Writing Testable Code in Go](https://relistan.com/writing-testable-apps-in-go)
+- [Logging in Go: Choosing a System and Using it](https://www.honeybadger.io/blog/golang-logging/)
+  
